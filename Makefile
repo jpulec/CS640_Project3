@@ -1,15 +1,17 @@
-CFLAGS=-g -Wall
+CFLAGS=-g -Wall -std=gnu99 -ggdb3
 LDFLAGS=
 CC=gcc
-SOURCES=sender.c requester.c
-EXECUTABLES=sender requester
+SHARED_SOURCES=utilities.c packet.c
+EXECUTABLES=emulator trace
 .PHONY=all
 .DEFAULT=all
 
 all: $(EXECUTABLES)
 
-$(EXECUTABLES): $(SOURCES)
-	$(CC) $(CFLAGS) $@.c -o $@
-
+$(EXECUTABLES): $(SHARED_SOURCES)
+	@echo " [Compiling dependencies: " $^ "...]";
+	@echo " [Building " $@ "... ]";
+	$(CC) $(CFLAGS) $^ $@.c -o $@
+	@echo " [Complete]";
 clean:
 	rm -rf *.o $(EXECUTABLES)

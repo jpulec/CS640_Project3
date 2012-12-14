@@ -18,7 +18,7 @@
 #include "utilities.h"
 
 
-MAX_TOP_SIZE = 20;
+int MAX_TOP_SIZE = 20;
 
 struct node {
     char *ip;

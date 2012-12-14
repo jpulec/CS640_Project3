@@ -43,27 +43,6 @@ void deserializePacket(void *msg, struct packet *pkt) {
     memcpy(pkt->payload, p->payload, MAX_PAYLOAD);
 }
 
-void sendPacketTo(int sockfd, struct packet *pkt, struct sockaddr *addr) {
-    struct packet *spkt = serializePacket(pkt);
-    size_t bytesSent = sendto(sockfd, spkt, PACKET_SIZE,
-                              0, addr, sizeof(struct sockaddr));
-
-    if (bytesSent == -1) {
-        perror("Sendto error");
-        fprintf(stderr, "Error sending packet\n");
-    } else {
-        const char *typeStr;
-        if      (pkt->type == 'R') typeStr = "**REQUEST**";
-        else if (pkt->type == 'D') typeStr = "DATA";
-        else if (pkt->type == 'E') typeStr = "**END***";
-        else if (pkt->type == 'A') typeStr = "ACK";
-        else                       typeStr = "UNDEFINED";
-
-        printf("-> [Sent %s packet] ", typeStr);
-        printPacketInfo(pkt, (struct sockaddr_storage *)addr);
-    }
-}
-
 void printPacketInfo(struct packet *pkt, struct sockaddr_storage *saddr) {
     if (pkt == NULL) {
         fprintf(stderr, "Unable to print info for null packet\n");
@@ -100,3 +79,23 @@ void printPacketInfo(struct packet *pkt, struct sockaddr_storage *saddr) {
     */
 }
 
+void sendPacketTo(int sockfd, struct packet *pkt, struct sockaddr *addr) {
+    struct packet *spkt = serializePacket(pkt);
+    size_t bytesSent = sendto(sockfd, spkt, PACKET_SIZE,
+                              0, addr, sizeof(struct sockaddr));
+
+    if (bytesSent == -1) {
+        perror("Sendto error");
+        fprintf(stderr, "Error sending packet\n");
+    } else {
+        const char *typeStr;
+        if      (pkt->type == 'R') typeStr = "**REQUEST**";
+        else if (pkt->type == 'D') typeStr = "DATA";
+        else if (pkt->type == 'E') typeStr = "**END***";
+        else if (pkt->type == 'A') typeStr = "ACK";
+        else                       typeStr = "UNDEFINED";
+
+        printf("-> [Sent %s packet] ", typeStr);
+        printPacketInfo(pkt, (struct sockaddr_storage *)addr);
+    }
+}
