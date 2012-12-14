@@ -1,8 +1,8 @@
 CFLAGS=-g -Wall
 LDFLAGS=
 CC=gcc
-SOURCES=emulator.c packet.c trace.c
-EXECUTABLES=emulator trace
+SOURCES=sender.c requester.c
+EXECUTABLES=sender requester
 .PHONY=all
 .DEFAULT=all
 
